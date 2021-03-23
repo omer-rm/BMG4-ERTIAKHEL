@@ -1,5 +1,6 @@
 import 'package:Artizakel/Screens/TapedScreens/HomeTapedScreen.dart';
 import 'package:Artizakel/Screens/TapedScreens/addProductTapedScreen.dart';
+import 'package:Artizakel/Screens/TapedScreens/mapTapedScreen.dart';
 import 'package:Artizakel/Screens/TapedScreens/profileTapedScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,15 +10,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isMainScreen = true;
   int _currentIndex = 0;
   final List<Widget> _children = [
     HomeTapedScreen(),
     AddProductTapedScreen(),
     ProfileTapedScreen(),
+    MapTapedScreen(),
   ];
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+      if (_currentIndex != 0) {
+        isMainScreen = false;
+      } else {
+        isMainScreen = true;
+      }
     });
   }
 
@@ -32,18 +40,23 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => print("object"),
-          )
+          isMainScreen
+              ? IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () => print("obaject"),
+                )
+              : Container(),
         ],
-        leading: IconButton(
-            icon: Icon(Icons.message), onPressed: () => print("object")),
+        leading: isMainScreen
+            ? IconButton(
+                icon: Icon(Icons.message), onPressed: () => print("object"))
+            : Container(),
       ),
       body: Center(
         child: _children.elementAt(_currentIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         onTap: onTabTapped,
         backgroundColor: Colors.brown,
         currentIndex:
@@ -60,7 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             title: Text('Profile'),
-          )
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.map),
+            title: new Text('map'),
+          ),
         ],
       ),
     );
