@@ -2,6 +2,8 @@ import 'package:Artizakel/Screens/TapedScreens/HomeTapedScreen.dart';
 import 'package:Artizakel/Screens/TapedScreens/addProductTapedScreen.dart';
 import 'package:Artizakel/Screens/TapedScreens/mapTapedScreen.dart';
 import 'package:Artizakel/Screens/TapedScreens/profileTapedScreen.dart';
+import 'package:Artizakel/Screens/chatScreen.dart';
+import 'package:Artizakel/Screens/searchScreen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -43,13 +45,23 @@ class _HomeScreenState extends State<HomeScreen> {
           isMainScreen
               ? IconButton(
                   icon: Icon(Icons.search),
-                  onPressed: () => print("obaject"),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchScreen(),
+                      )),
                 )
               : Container(),
         ],
         leading: isMainScreen
             ? IconButton(
-                icon: Icon(Icons.message), onPressed: () => print("object"))
+                icon: Icon(Icons.message),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatScreen(),
+                    )),
+              )
             : Container(),
       ),
       body: Center(
