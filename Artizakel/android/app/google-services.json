@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "808594387775",
+    "project_id": "ertizekil-bmg4",
+    "storage_bucket": "ertizekil-bmg4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808594387775:android:a567fc8c4a663e5cb3d98a",
+        "android_client_info": {
+          "package_name": "com.example.Artizakel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808594387775-4sdtdvmjk5m2nqfh0a48024nuek6ok4t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByDmFAH7832Nsq2WxLT2IrBoR1bOZhf4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808594387775-4sdtdvmjk5m2nqfh0a48024nuek6ok4t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
