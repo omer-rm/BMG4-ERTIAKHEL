@@ -1,7 +1,7 @@
 import 'package:Artizakel/Screens/TapedScreens/HomeTapedScreen.dart';
 import 'package:Artizakel/Screens/TapedScreens/addProductTapedScreen.dart';
 import 'package:Artizakel/Screens/TapedScreens/mapTapedScreen.dart';
-import 'package:Artizakel/Screens/TapedScreens/profileTapedScreen.dart';
+import 'package:Artizakel/Screens/TapedScreens/profileAdapterScreen.dart';
 import 'package:Artizakel/Screens/chatScreen.dart';
 import 'package:Artizakel/Screens/searchScreen.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isMainScreen = true;
   int _currentIndex = 0;
+
   final List<Widget> _children = [
     HomeTapedScreen(),
     AddProductTapedScreen(),
-    ProfileTapedScreen(),
+    ProfileAdapterScreen(),
     MapTapedScreen(),
   ];
   void onTabTapped(int index) {
@@ -76,19 +77,19 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           BottomNavigationBarItem(
             icon: new Icon(Icons.home),
-            title: new Text('Home'),
+            label: "home",
           ),
           BottomNavigationBarItem(
             icon: new Icon(Icons.add),
-            title: new Text('add product'),
+            label: "add product",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('Profile'),
+            label: "profile",
           ),
           BottomNavigationBarItem(
             icon: new Icon(Icons.map),
-            title: new Text('map'),
+            label: "map",
           ),
         ],
       ),
