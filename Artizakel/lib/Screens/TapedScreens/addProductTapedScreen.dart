@@ -14,6 +14,7 @@ class _AddProductTapedScreenState extends State<AddProductTapedScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(15.0),
+            // ignore: deprecated_member_use
             child: RaisedButton(
               color: Colors.brown,
               onPressed: () {
@@ -25,7 +26,7 @@ class _AddProductTapedScreenState extends State<AddProductTapedScreen> {
               },
               child: Text(
                 "add a new product",
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25, color: Colors.white),
               ),
             ),
           ),

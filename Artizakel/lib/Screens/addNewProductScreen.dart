@@ -6,6 +6,7 @@ class AddProductScrreen extends StatefulWidget {
 }
 
 class _AddProductScrreenState extends State<AddProductScrreen> {
+  String dropdownValue = 'Electrical';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +16,7 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: () => print("obaject"),
+            onPressed: () => print("deneme"),
           )
         ],
       ),
@@ -57,6 +58,40 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
               onSaved: (value) {},
             ),
             selectImagePosition(),
+            SizedBox(height: 15),
+            Row(
+              children: [
+                Text("Type", style: TextStyle(fontSize: 15)),
+                SizedBox(width: 20),
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      dropdownValue = newValue;
+                    });
+                  },
+                  items: <String>[
+                    'Electrical',
+                    'decoration',
+                    'Houseware',
+                    'Other'
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -77,7 +112,7 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
           SizedBox(
             width: 25,
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {},
             child: Text(
               "select image",
