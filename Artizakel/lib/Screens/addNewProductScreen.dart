@@ -46,7 +46,6 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
-              //  add products to data base
               inserProductToDataBase(
                   context,
                   _editedProduct.title,
