@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:Artizakel/Provider/ProviderHandler.dart';
 import 'package:Artizakel/Screens/HomePageScreen.dart';
+import 'package:Artizakel/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -69,10 +72,30 @@ class _AuthCardState extends State<AuthCard> {
       // Log user in
       _auth.signInWithEmailAndPassword(
           email: _authData['email'], password: _authData['password']);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        ModalRoute.withName('/'),
+      );
     } else {
       // Sign user up
-      _auth.createUserWithEmailAndPassword(
-          email: _authData['email'], password: _authData['password']);
+      User user = (await _auth
+              .createUserWithEmailAndPassword(
+                  email: _authData['email'], password: _authData['password'])
+              .catchError((err) {
+        print(err);
+        Navigator.pop(context);
+      }))
+          .user;
+      if (user != null) {
+        Map userDataMap = {
+          "email": _authData['email'],
+          "Name": "notdfinded name",
+        };
+        userRef.child(user.uid).set(userDataMap);
+        Provider.of<ProviderHandler>(context, listen: false)
+            .updateUserData(user);
+      }
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
