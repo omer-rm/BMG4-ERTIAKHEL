@@ -121,6 +121,7 @@ class ProviderHandler extends ChangeNotifier {
   }
 
   void deleteProduct(String id) async {
+    // upload to github.
     final url =
         'https://ertizekil-bmg4-default-rtdb.firebaseio.com/Product/$id.json';
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
