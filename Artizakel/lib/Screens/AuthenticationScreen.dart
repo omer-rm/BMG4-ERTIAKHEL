@@ -70,13 +70,21 @@ class _AuthCardState extends State<AuthCard> {
     });
     if (_authMode == AuthMode.Login) {
       // Log user in
-      _auth.signInWithEmailAndPassword(
-          email: _authData['email'], password: _authData['password']);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-        ModalRoute.withName('/'),
-      );
+      _auth
+          .signInWithEmailAndPassword(
+              email: _authData['email'], password: _authData['password'])
+          .then((user) {
+        Provider.of<ProviderHandler>(context, listen: false).cuerrentUser =
+            user.user;
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          ModalRoute.withName('/'),
+        );
+      }).catchError((err) {
+        print(err);
+        return;
+      });
     } else {
       // Sign user up
       User user = (await _auth

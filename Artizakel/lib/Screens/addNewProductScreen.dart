@@ -15,6 +15,11 @@ class AddProductScrreen extends StatefulWidget {
 }
 
 class _AddProductScrreenState extends State<AddProductScrreen> {
+  final _priceFocusNode = FocusNode();
+  final _descriptionFocusNode = FocusNode();
+  final _imageUrlController = TextEditingController();
+  final _imageUrlFocusNode = FocusNode();
+  final _form = GlobalKey<FormState>();
   var _editedProduct = Product(
     id: null,
     title: '',
@@ -28,13 +33,104 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
     'price': '',
     'imageUrl': '',
   };
+  var _isInit = true;
+  var _isLoading = false;
 
-  final _priceFocusNode = FocusNode();
-  final _descriptionFocusNode = FocusNode();
-  final _imageUrlController = TextEditingController();
-  final _imageUrlFocusNode = FocusNode();
-  final _form = GlobalKey<FormState>();
+  @override
+  void initState() {
+    _imageUrlFocusNode.addListener(_updateImageUrl);
+    super.initState();
+  }
+
   bool isloading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final productId = ModalRoute.of(context).settings.arguments as String;
+      if (productId != null) {
+        _editedProduct = Provider.of<ProviderHandler>(context, listen: false)
+            .findById(productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          'imageUrl': '',
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _imageUrlFocusNode.removeListener(_updateImageUrl);
+    _priceFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _imageUrlController.dispose();
+    _imageUrlFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _updateImageUrl() {
+    if (!_imageUrlFocusNode.hasFocus) {
+      if ((!_imageUrlController.text.startsWith('http') &&
+              !_imageUrlController.text.startsWith('https')) ||
+          (!_imageUrlController.text.endsWith('.png') &&
+              !_imageUrlController.text.endsWith('.jpg') &&
+              !_imageUrlController.text.endsWith('.jpeg'))) {
+        return;
+      }
+      setState(() {});
+    }
+  }
+
+  Future<void> _saveForm() async {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
+    _form.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
+    if (_editedProduct.id != null) {
+      await Provider.of<ProviderHandler>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      try {
+        await Provider.of<ProviderHandler>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred!'),
+            content: Text('Something went wrong.'),
+            actions: <Widget>[
+              // ignore: deprecated_member_use
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+        );
+      }
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
+  }
+
   String dropdownValue = 'Electrical';
   @override
   Widget build(BuildContext context) {
@@ -45,14 +141,7 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: () {
-              inserProductToDataBase(
-                  context,
-                  _editedProduct.title,
-                  _editedProduct.price,
-                  _editedProduct.description,
-                  _editedProduct.imageUrl);
-            },
+            onPressed: _saveForm,
           )
         ],
       ),
@@ -75,7 +164,15 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
                   }
                   return null;
                 },
-                onSaved: (value) {},
+                onSaved: (value) {
+                  _editedProduct = Product(
+                      title: value,
+                      price: _editedProduct.price,
+                      description: _editedProduct.description,
+                      imageUrl: _editedProduct.imageUrl,
+                      id: _editedProduct.id,
+                      isFavorite: _editedProduct.isFavorite);
+                },
               ),
               TextFormField(
                 initialValue: _initValues['price'],
@@ -98,7 +195,15 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
                   }
                   return null;
                 },
-                onSaved: (value) {},
+                onSaved: (value) {
+                  _editedProduct = Product(
+                      title: _editedProduct.title,
+                      price: value,
+                      description: _editedProduct.description,
+                      imageUrl: _editedProduct.imageUrl,
+                      id: _editedProduct.id,
+                      isFavorite: _editedProduct.isFavorite);
+                },
               ),
               TextFormField(
                 initialValue: _initValues['description'],
@@ -115,7 +220,16 @@ class _AddProductScrreenState extends State<AddProductScrreen> {
                   }
                   return null;
                 },
-                onSaved: (value) {},
+                onSaved: (value) {
+                  _editedProduct = Product(
+                    title: _editedProduct.title,
+                    price: _editedProduct.price,
+                    description: value,
+                    imageUrl: _editedProduct.imageUrl,
+                    id: _editedProduct.id,
+                    isFavorite: _editedProduct.isFavorite,
+                  );
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,

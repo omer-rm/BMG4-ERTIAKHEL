@@ -1,4 +1,7 @@
+import 'package:Artizakel/Provider/ProviderHandler.dart';
+import 'package:Artizakel/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfileTapedScreen extends StatefulWidget {
   @override
@@ -6,8 +9,13 @@ class ProfileTapedScreen extends StatefulWidget {
 }
 
 class _ProfileTapedScreenState extends State<ProfileTapedScreen> {
+  String name;
+
   @override
   Widget build(BuildContext context) {
+    var user =
+        Provider.of<ProviderHandler>(context, listen: false).cuerrentUser;
+    getuserName(user.uid);
     return Container(
       child: Column(
         children: [
@@ -17,7 +25,7 @@ class _ProfileTapedScreenState extends State<ProfileTapedScreen> {
             color: Colors.grey,
           ),
           Text(
-            "asya ahmed",
+            name == null ? "" : name,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           Text(
@@ -34,6 +42,7 @@ class _ProfileTapedScreenState extends State<ProfileTapedScreen> {
                     color: Colors.red,
                   ),
                   onPressed: () {}),
+              // ignore: deprecated_member_use
               RaisedButton(
                 onPressed: () {},
                 child: Text(
@@ -73,5 +82,15 @@ class _ProfileTapedScreenState extends State<ProfileTapedScreen> {
         image: NetworkImage(imageURL),
       ),
     );
+  }
+
+  void getuserName(var userid) {
+    userRef.child(userid).once().then((data) {
+      var userdata = data.value;
+
+      setState(() {
+        name = userdata['Name'];
+      });
+    });
   }
 }
