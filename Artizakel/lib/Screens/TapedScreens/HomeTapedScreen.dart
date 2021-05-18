@@ -1,5 +1,8 @@
+import 'package:Artizakel/Provider/ProviderHandler.dart';
+import 'package:Artizakel/widgets/ProductGrid.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeTapedScreen extends StatefulWidget {
   @override
@@ -7,13 +10,45 @@ class HomeTapedScreen extends StatefulWidget {
 }
 
 class _HomeTapedScreenState extends State<HomeTapedScreen> {
+  var _isLoading = false;
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<ProviderHandler>(context).fetchAndSetProduct().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        topSliderImages(),
-        Text("THIS IS PRODUCT ARIA "),
-      ],
+    return Container(
+      child: Column(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                topSliderImages(),
+                SizedBox(height: 20),
+              ],
+            ),
+          ),
+          _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Expanded(child: ProductGrid()),
+        ],
+      ),
     );
   }
 
