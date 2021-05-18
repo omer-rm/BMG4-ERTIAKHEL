@@ -29,7 +29,7 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
     final url =
-        'https://artizakhen.firebaseio.com/userFavorites/$userId/$id.json';
+        'https://ertizekil-bmg4-default-rtdb.firebaseio.com/userFavorites/$userId/$id.json';
     try {
       final response = await http.put(Uri.parse(url),
           body: json.encode(

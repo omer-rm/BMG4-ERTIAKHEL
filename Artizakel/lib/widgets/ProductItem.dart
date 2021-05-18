@@ -1,4 +1,5 @@
 import 'package:Artizakel/Models/product.dart';
+import 'package:Artizakel/Provider/ProviderHandler.dart';
 import 'package:Artizakel/chats/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
-    //  final authData = Provider.of<Auth>(context, listen: false);
+    final authData = Provider.of<ProviderHandler>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -21,7 +22,7 @@ class ProductItem extends StatelessWidget {
           child: Hero(
             tag: product.id,
             child: FadeInImage(
-              placeholder: AssetImage("assets/images/Artizakhen.png"),
+              placeholder: AssetImage(""),
               image: NetworkImage(product.imageUrl),
               fit: BoxFit.cover,
             ),
@@ -36,7 +37,7 @@ class ProductItem extends StatelessWidget {
               ),
               color: Colors.red,
               onPressed: () {
-                //  product.toggleFavorateState(UserInformation.userID);
+                product.toggleFavorateState(authData.userId);
               },
             ),
           ),

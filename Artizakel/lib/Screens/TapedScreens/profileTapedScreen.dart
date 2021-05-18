@@ -1,4 +1,5 @@
 import 'package:Artizakel/Provider/ProviderHandler.dart';
+import 'package:Artizakel/Screens/FavoritesScreen.dart';
 import 'package:Artizakel/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,11 @@ class ProfileTapedScreen extends StatefulWidget {
 
 class _ProfileTapedScreenState extends State<ProfileTapedScreen> {
   String name;
+
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<ProviderHandler>(context, listen: false)
+        .fetchAndSetProduct(true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +47,9 @@ class _ProfileTapedScreenState extends State<ProfileTapedScreen> {
                     size: 35,
                     color: Colors.red,
                   ),
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.pushNamed(context, FavoritesScreen.routeName);
+                  }),
               // ignore: deprecated_member_use
               RaisedButton(
                 onPressed: () {},
