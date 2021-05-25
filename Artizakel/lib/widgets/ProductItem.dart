@@ -1,5 +1,6 @@
 import 'package:Artizakel/Models/product.dart';
 import 'package:Artizakel/Provider/ProviderHandler.dart';
+import 'package:Artizakel/Screens/product_deatel_screen.dart';
 import 'package:Artizakel/chats/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +15,10 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: () {
-            // Navigator.of(context).pushNamed(
-            //   ProductsDetailScreen.routeName,
-            //   arguments: product.id,
-            // );
+            Navigator.of(context).pushNamed(
+              ProductsDetailScreen.routeName,
+              arguments: product.id,
+            );
           },
           child: Hero(
             tag: product.id,

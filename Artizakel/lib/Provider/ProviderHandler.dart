@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:Artizakel/Models/chats.dart';
 import 'package:Artizakel/Models/product.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ class ProviderHandler extends ChangeNotifier {
   User cuerrentUser;
   String userId;
   List<Product> productsList = [];
+
+  List<Chats> chatList = [];
   void updateUserData(User user) {
     cuerrentUser = user;
     notifyListeners();
@@ -134,5 +137,32 @@ class ProviderHandler extends ChangeNotifier {
       notifyListeners();
     }
     existingProduct = null;
+  }
+
+  void getchatlist(String userid) async {
+    userId = cuerrentUser.uid;
+    final url =
+        'https://ertizekil-bmg4-default-rtdb.firebaseio.com/chats/$userid.json';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      if (extractedData == null) {
+        return;
+      } else {
+        extractedData.forEach((chatid, chatdata) {
+          chatList.add(
+            Chats(
+              id: chatid,
+              message: chatdata["message"],
+              reciver: chatdata["reciver"],
+              userid: userid,
+            ),
+          );
+        });
+      }
+    } catch (err) {
+      print(err);
+    }
   }
 }

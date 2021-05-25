@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Artizakel/Provider/ProviderHandler.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -8,77 +9,54 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  DatabaseReference chatref =
+      FirebaseDatabase.instance.reference().child("chats");
   String formatedString;
   @override
   Widget build(BuildContext context) {
+    final chat = Provider.of<ProviderHandler>(context, listen: false);
+    chat.getchatlist(chat.userId);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Chat page"),
-      ),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('chats').snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              print("No DATA FOUND");
-              return CircularProgressIndicator();
-            }
-            var docs = snapshot.data.documents;
-            print(docs.length);
-            return ListView.builder(
-                itemCount: docs.length,
-                itemBuilder: (context, i) {
-                  DateTime dateTime = docs[i]['createdAt'].toDate();
-                  return Dismissible(
-                    key: ValueKey(docs),
-                    onDismissed: (covariant) {
-                      setState(() {
-                        docs.removeAt(i);
-                      });
-                    },
-                    child: new Column(
+        appBar: AppBar(
+          title: Text("Chat page"),
+        ),
+        body: ListView.builder(
+            itemCount: chat.chatList.length,
+            itemBuilder: (context, i) {
+              return new Column(
+                children: [
+                  new Divider(
+                    height: 10,
+                  ),
+                  new ListTile(
+                    leading: new CircleAvatar(
+                      foregroundColor: Theme.of(context).primaryColor,
+                      backgroundColor: Colors.grey,
+                      backgroundImage: new NetworkImage(
+                          'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg'),
+                    ),
+                    title: new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Divider(
-                          height: 10,
-                        ),
-                        new ListTile(
-                          leading: new CircleAvatar(
-                            foregroundColor: Theme.of(context).primaryColor,
-                            backgroundColor: Colors.grey,
-                            backgroundImage: new NetworkImage(
-                                'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg'),
-                          ),
-                          title: new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: new Text(
-                                  docs[i]['userName'][0].toString(),
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              new Text(
-                                DateFormat().format(dateTime),
-                                style: TextStyle(
-                                    fontSize: 14.0, color: Colors.black54),
-                              ),
-                            ],
-                          ),
-                          subtitle: new Container(
-                            padding: EdgeInsets.only(top: 5.0),
-                            child: Text(
-                              docs[i]['text'],
-                              style: TextStyle(
-                                  fontSize: 14.0, color: Colors.black54),
-                            ),
+                        Expanded(
+                          child: new Text(
+                            chat.chatList[i].userid,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
                     ),
-                  );
-                });
-          }),
-    );
+                    subtitle: new Container(
+                      padding: EdgeInsets.only(top: 5.0),
+                      child: Text(
+                        chat.chatList[i].message,
+                        style: TextStyle(fontSize: 14.0, color: Colors.black54),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }));
   }
 }

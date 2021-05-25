@@ -18,6 +18,7 @@ class _AddProductTapedScreenState extends State<AddProductTapedScreen> {
         ? AuthenticationScreen()
         : Container(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(15.0),

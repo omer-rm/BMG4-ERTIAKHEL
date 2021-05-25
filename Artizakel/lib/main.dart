@@ -1,6 +1,8 @@
 import 'package:Artizakel/Provider/ProviderHandler.dart';
+import 'package:Artizakel/Screens/FavoritesScreen.dart';
 import 'package:Artizakel/Screens/HomePageScreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Artizakel/Screens/product_deatel_screen.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +32,10 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: HomeScreen(),
-        // routes: {
-        //   FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
-        // },
+        routes: {
+          ProductsDetailScreen.routeName: (context) => ProductsDetailScreen(),
+          FavoritesScreen.routeName: (context) => FavoritesScreen(),
+        },
       ),
     );
   }
